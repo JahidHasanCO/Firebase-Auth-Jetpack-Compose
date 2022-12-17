@@ -5,12 +5,12 @@ plugins {
 
 android {
     namespace 'dev.jahidhasanco.firebaseauth'
-    compileSdk 32
+    compileSdk 33
 
     defaultConfig {
         applicationId "dev.jahidhasanco.firebaseauth"
         minSdk 21
-        targetSdk 32
+        targetSdk 33
         versionCode 1
         versionName "1.0"
 
@@ -60,4 +60,6 @@ dependencies {
     androidTestImplementation "androidx.compose.ui:ui-test-junit4:$compose_ui_version"
     debugImplementation "androidx.compose.ui:ui-tooling:$compose_ui_version"
     debugImplementation "androidx.compose.ui:ui-test-manifest:$compose_ui_version"
+
+    implementation "androidx.constraintlayout:constraintlayout-compose:1.0.1"
 }
