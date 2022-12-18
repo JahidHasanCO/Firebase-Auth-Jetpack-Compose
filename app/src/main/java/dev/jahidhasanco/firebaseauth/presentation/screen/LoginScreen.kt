@@ -22,13 +22,18 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.ramcosta.composedestinations.annotation.Destination
+import com.ramcosta.composedestinations.navigation.DestinationsNavigator
 import dev.jahidhasanco.firebaseauth.R
 import dev.jahidhasanco.firebaseauth.ui.theme.FirebaseAuthTheme
 import dev.jahidhasanco.firebaseauth.ui.theme.primaryColor
 import dev.jahidhasanco.firebaseauth.ui.theme.secondaryColor
 
+@Destination
 @Composable
-fun LoginScreen() {
+fun LoginScreen(
+    navigator: DestinationsNavigator
+) {
     val context = LocalContext.current
     val email = remember { mutableStateOf("") }
     val password = remember { mutableStateOf("") }
@@ -161,6 +166,6 @@ fun LoginScreen() {
 @Composable
 fun LoginScreenPreview() {
     FirebaseAuthTheme {
-        LoginScreen()
+      //  LoginScreen(navigator = DestinationsNavigator())
     }
 }

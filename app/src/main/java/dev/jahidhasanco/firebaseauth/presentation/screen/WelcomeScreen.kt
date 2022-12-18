@@ -20,14 +20,21 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.constraintlayout.compose.ConstraintLayout
+import com.ramcosta.composedestinations.annotation.Destination
+import com.ramcosta.composedestinations.navigation.DestinationsNavigator
 import dev.jahidhasanco.firebaseauth.R
+import dev.jahidhasanco.firebaseauth.presentation.screen.destinations.LoginScreenDestination
 import dev.jahidhasanco.firebaseauth.ui.theme.primaryColorAlpha
 
-
+@Destination(start = true)
 @Composable
-fun WelcomeScreen() {
+fun WelcomeScreen(
+    navigator: DestinationsNavigator
+) {
 
-    ConstraintLayout(modifier = Modifier.fillMaxSize()) {
+    ConstraintLayout(modifier = Modifier
+        .fillMaxSize()
+        .background(Color.White)) {
 
         val (image, container) = createRefs()
 
@@ -88,7 +95,7 @@ fun WelcomeScreen() {
 
                 Button(
                     onClick = {
-
+                        navigator.navigate(LoginScreenDestination)
                     },
                     modifier = Modifier
                         .fillMaxWidth()
@@ -140,5 +147,5 @@ fun WelcomeScreen() {
 @Preview(showBackground = true)
 @Composable
 fun WelcomeScreenPreview() {
-    WelcomeScreen()
+    //  WelcomeScreen()
 }
