@@ -24,6 +24,7 @@ import com.ramcosta.composedestinations.annotation.Destination
 import com.ramcosta.composedestinations.navigation.DestinationsNavigator
 import dev.jahidhasanco.firebaseauth.R
 import dev.jahidhasanco.firebaseauth.presentation.screen.destinations.LoginScreenDestination
+import dev.jahidhasanco.firebaseauth.presentation.screen.destinations.SignUpScreenDestination
 import dev.jahidhasanco.firebaseauth.ui.theme.primaryColorAlpha
 
 @Destination(start = true)
@@ -32,9 +33,11 @@ fun WelcomeScreen(
     navigator: DestinationsNavigator
 ) {
 
-    ConstraintLayout(modifier = Modifier
-        .fillMaxSize()
-        .background(Color.White)) {
+    ConstraintLayout(
+        modifier = Modifier
+            .fillMaxSize()
+            .background(Color.White)
+    ) {
 
         val (image, container) = createRefs()
 
@@ -118,7 +121,7 @@ fun WelcomeScreen(
 
                 Button(
                     onClick = {
-
+                        navigator.navigate(SignUpScreenDestination)
                     },
                     modifier = Modifier
                         .fillMaxWidth()

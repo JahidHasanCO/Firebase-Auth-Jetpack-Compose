@@ -25,16 +25,16 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.ramcosta.composedestinations.annotation.Destination
 import dev.jahidhasanco.firebaseauth.R
-import dev.jahidhasanco.firebaseauth.ui.theme.FirebaseAuthTheme
 import dev.jahidhasanco.firebaseauth.ui.theme.primaryColor
 import dev.jahidhasanco.firebaseauth.ui.theme.secondaryColor
 
 @Destination
 @Composable
-fun LoginScreen() {
+fun SignUpScreen() {
     val context = LocalContext.current
     val email = remember { mutableStateOf("") }
     val password = remember { mutableStateOf("") }
+    val cPassword = remember { mutableStateOf("") }
 
     Image(
         painter = painterResource(id = R.drawable.girl_pic_2),
@@ -64,7 +64,7 @@ fun LoginScreen() {
         ) {
 
             Text(
-                text = "Sign In", modifier = Modifier
+                text = "Sign Up", modifier = Modifier
                     .fillMaxWidth()
                     .padding(top = 16.dp, start = 20.dp, end = 20.dp),
                 color = Color.White,
@@ -74,7 +74,7 @@ fun LoginScreen() {
             )
 
             Text(
-                text = "Sign In your account for exploring our services.", modifier = Modifier
+                text = "Sign Up your account for exploring our services.", modifier = Modifier
                     .fillMaxWidth()
                     .padding(top = 6.dp, start = 20.dp, end = 20.dp),
                 color = Color.White,
@@ -124,13 +124,25 @@ fun LoginScreen() {
                 visualTransformation = PasswordVisualTransformation()
             )
 
-            Text(
-                text = "Forgot Password?",
-                modifier = Modifier
+            TextField(
+                value = cPassword.value,
+                onValueChange = {
+                    cPassword.value = it
+                }, modifier = Modifier
                     .fillMaxWidth()
-                    .padding(top = 16.dp, start = 20.dp, end = 20.dp),
-                textAlign = TextAlign.End,
-                color = Color.White,
+                    .padding(start = 20.dp, end = 20.dp, top = 16.dp),
+                label = { Text(text = "Confirm Password", color = Color.White) },
+                textStyle = MaterialTheme.typography.body1,
+                singleLine = true,
+                keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Password),
+                colors = TextFieldDefaults.textFieldColors(
+                    backgroundColor = Color.Transparent,
+                    focusedIndicatorColor = Color.White,
+                    unfocusedIndicatorColor = Color.White,
+                    disabledIndicatorColor = Color.White,
+                    textColor = Color.White
+                ),
+                visualTransformation = PasswordVisualTransformation()
             )
 
             Button(
@@ -151,7 +163,7 @@ fun LoginScreen() {
                 )
             ) {
                 Text(
-                    text = "Login", modifier = Modifier.padding(5.dp),
+                    text = "Sign Up", modifier = Modifier.padding(5.dp),
                     fontSize = MaterialTheme.typography.h6.fontSize,
                     color = Color.Black
                 )
@@ -161,10 +173,8 @@ fun LoginScreen() {
     }
 }
 
-@Preview(showBackground = true)
+@Preview
 @Composable
-fun LoginScreenPreview() {
-    FirebaseAuthTheme {
-        LoginScreen()
-    }
+fun SignUpScreenPreview() {
+    SignUpScreen()
 }
