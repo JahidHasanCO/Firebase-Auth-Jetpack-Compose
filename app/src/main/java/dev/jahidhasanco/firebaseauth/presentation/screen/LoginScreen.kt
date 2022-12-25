@@ -1,6 +1,5 @@
 package dev.jahidhasanco.firebaseauth.presentation.screen
 
-import android.widget.Toast
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
@@ -8,6 +7,7 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.*
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.SideEffect
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
@@ -23,18 +23,53 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.lifecycle.compose.ExperimentalLifecycleComposeApi
+import com.google.accompanist.systemuicontroller.rememberSystemUiController
 import com.ramcosta.composedestinations.annotation.Destination
 import dev.jahidhasanco.firebaseauth.R
+import dev.jahidhasanco.firebaseauth.domain.repository.AuthRepository
+import dev.jahidhasanco.firebaseauth.presentation.viewmodel.AuthViewModel
 import dev.jahidhasanco.firebaseauth.ui.theme.FirebaseAuthTheme
 import dev.jahidhasanco.firebaseauth.ui.theme.primaryColor
 import dev.jahidhasanco.firebaseauth.ui.theme.secondaryColor
 
+@OptIn(ExperimentalLifecycleComposeApi::class)
 @Destination
 @Composable
-fun LoginScreen() {
+fun LoginScreen(
+    authViewModel: AuthViewModel = hiltViewModel()
+) {
+
+    val systemUiController = rememberSystemUiController()
+
+    SideEffect {
+        systemUiController.setStatusBarColor(primaryColor)
+        systemUiController.setNavigationBarColor(secondaryColor)
+    }
+
     val context = LocalContext.current
     val email = remember { mutableStateOf("") }
     val password = remember { mutableStateOf("") }
+
+//    val userState = authViewModel.user.collectAsStateWithLifecycle()
+//
+//    userState.value.data?.let {
+//        Toast.makeText(context, "Login Success", Toast.LENGTH_SHORT).show()
+//    }
+//
+//    userState.value.error.isNotEmpty().let {
+//        Toast.makeText(context, userState.value.error, Toast.LENGTH_SHORT).show()
+//    }
+//
+//    userState.value.isLoading.let {
+//        CircularProgressIndicator(
+//            modifier = Modifier.size(size = 64.dp),
+//            color = primaryColor,
+//            strokeWidth = 6.dp
+//        )
+//        context.displayToast("Loading...")
+//    }
 
     Image(
         painter = painterResource(id = R.drawable.girl_pic_2),
@@ -135,11 +170,7 @@ fun LoginScreen() {
 
             Button(
                 onClick = {
-                    Toast.makeText(
-                        context,
-                        "Email: ${email.value} Password: ${password.value}",
-                        Toast.LENGTH_SHORT
-                    ).show()
+                    authViewModel.login(email.value, password.value)
                 },
                 modifier = Modifier
                     .fillMaxWidth()
@@ -165,6 +196,6 @@ fun LoginScreen() {
 @Composable
 fun LoginScreenPreview() {
     FirebaseAuthTheme {
-        LoginScreen()
+        LoginScreen(AuthViewModel(AuthRepository()))
     }
 }

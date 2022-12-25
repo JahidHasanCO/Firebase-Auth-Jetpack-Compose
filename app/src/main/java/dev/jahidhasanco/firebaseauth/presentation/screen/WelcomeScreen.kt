@@ -10,6 +10,7 @@ import androidx.compose.material.ButtonDefaults
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.SideEffect
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
@@ -20,11 +21,14 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.constraintlayout.compose.ConstraintLayout
+import com.google.accompanist.systemuicontroller.rememberSystemUiController
 import com.ramcosta.composedestinations.annotation.Destination
 import com.ramcosta.composedestinations.navigation.DestinationsNavigator
 import dev.jahidhasanco.firebaseauth.R
 import dev.jahidhasanco.firebaseauth.presentation.screen.destinations.LoginScreenDestination
 import dev.jahidhasanco.firebaseauth.presentation.screen.destinations.SignUpScreenDestination
+import dev.jahidhasanco.firebaseauth.ui.theme.Teal200
+import dev.jahidhasanco.firebaseauth.ui.theme.primaryColor
 import dev.jahidhasanco.firebaseauth.ui.theme.primaryColorAlpha
 
 @Destination(start = true)
@@ -32,6 +36,16 @@ import dev.jahidhasanco.firebaseauth.ui.theme.primaryColorAlpha
 fun WelcomeScreen(
     navigator: DestinationsNavigator
 ) {
+
+    val systemUiController = rememberSystemUiController()
+    SideEffect {
+        systemUiController.setStatusBarColor(
+            color = Teal200
+        )
+        systemUiController.setNavigationBarColor(
+            color = primaryColor
+        )
+    }
 
     ConstraintLayout(
         modifier = Modifier
