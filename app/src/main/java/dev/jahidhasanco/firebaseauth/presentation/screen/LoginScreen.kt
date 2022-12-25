@@ -1,20 +1,23 @@
 package dev.jahidhasanco.firebaseauth.presentation.screen
 
+import android.annotation.SuppressLint
+import android.widget.Toast
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardOptions
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.*
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.SideEffect
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
+import androidx.compose.runtime.*
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.LocalLifecycleOwner
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.KeyboardType
@@ -24,24 +27,28 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
-import androidx.lifecycle.compose.ExperimentalLifecycleComposeApi
+import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.repeatOnLifecycle
 import com.google.accompanist.systemuicontroller.rememberSystemUiController
 import com.ramcosta.composedestinations.annotation.Destination
+import com.ramcosta.composedestinations.navigation.DestinationsNavigator
 import dev.jahidhasanco.firebaseauth.R
-import dev.jahidhasanco.firebaseauth.domain.repository.AuthRepository
+import dev.jahidhasanco.firebaseauth.presentation.screen.destinations.HomeScreenDestination
 import dev.jahidhasanco.firebaseauth.presentation.viewmodel.AuthViewModel
 import dev.jahidhasanco.firebaseauth.ui.theme.FirebaseAuthTheme
 import dev.jahidhasanco.firebaseauth.ui.theme.primaryColor
 import dev.jahidhasanco.firebaseauth.ui.theme.secondaryColor
 
-@OptIn(ExperimentalLifecycleComposeApi::class)
+
+@SuppressLint("StateFlowValueCalledInComposition")
 @Destination
 @Composable
 fun LoginScreen(
-    authViewModel: AuthViewModel = hiltViewModel()
+    authViewModel: AuthViewModel = hiltViewModel(),
+    navigator: DestinationsNavigator
 ) {
-
     val systemUiController = rememberSystemUiController()
+    val scrollState = rememberScrollState()
 
     SideEffect {
         systemUiController.setStatusBarColor(primaryColor)
@@ -52,24 +59,28 @@ fun LoginScreen(
     val email = remember { mutableStateOf("") }
     val password = remember { mutableStateOf("") }
 
-//    val userState = authViewModel.user.collectAsStateWithLifecycle()
-//
-//    userState.value.data?.let {
-//        Toast.makeText(context, "Login Success", Toast.LENGTH_SHORT).show()
-//    }
-//
-//    userState.value.error.isNotEmpty().let {
-//        Toast.makeText(context, userState.value.error, Toast.LENGTH_SHORT).show()
-//    }
-//
-//    userState.value.isLoading.let {
-//        CircularProgressIndicator(
-//            modifier = Modifier.size(size = 64.dp),
-//            color = primaryColor,
-//            strokeWidth = 6.dp
-//        )
-//        context.displayToast("Loading...")
-//    }
+    val lifecycle = LocalLifecycleOwner.current.lifecycle
+    val uiState by produceState(
+        initialValue = authViewModel.user.value,
+        key1 = lifecycle,
+        key2 = authViewModel
+
+    ) {
+        lifecycle.repeatOnLifecycle(state = Lifecycle.State.STARTED) {
+            authViewModel.user.collect {
+                value = it
+                if (it.error.isNotBlank()) {
+                    Toast.makeText(context, it.error, Toast.LENGTH_SHORT).show()
+                }
+                it.data?.let { user ->
+                    navigator.navigate(HomeScreenDestination)
+                    navigator.clearBackStack(HomeScreenDestination)
+                    Toast.makeText(context, "Welcome ${user.email}", Toast.LENGTH_SHORT).show()
+                }
+            }
+        }
+    }
+
 
     Image(
         painter = painterResource(id = R.drawable.girl_pic_2),
@@ -84,6 +95,7 @@ fun LoginScreen(
     Box(
         modifier = Modifier
             .fillMaxSize()
+            .verticalScroll(scrollState, enabled = true)
             .padding(top = 350.dp)
             .background(
                 brush = Brush.verticalGradient(
@@ -97,7 +109,6 @@ fun LoginScreen(
         Column(
             modifier = Modifier.fillMaxSize()
         ) {
-
             Text(
                 text = "Sign In", modifier = Modifier
                     .fillMaxWidth()
@@ -168,6 +179,15 @@ fun LoginScreen(
                 color = Color.White,
             )
 
+            if (uiState.isLoading) {
+                CircularProgressIndicator(
+                    modifier = Modifier
+                        .align(Alignment.CenterHorizontally)
+                        .padding(16.dp),
+                    color = Color.White
+                )
+            }
+
             Button(
                 onClick = {
                     authViewModel.login(email.value, password.value)
@@ -196,6 +216,8 @@ fun LoginScreen(
 @Composable
 fun LoginScreenPreview() {
     FirebaseAuthTheme {
-        LoginScreen(AuthViewModel(AuthRepository()))
+//        LoginScreen(AuthViewModel(AuthRepository()),
+//
+//        )
     }
 }

@@ -3,12 +3,11 @@ package dev.jahidhasanco.firebaseauth.presentation.screen
 import android.widget.Toast
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
-import androidx.compose.foundation.gestures.Orientation
-import androidx.compose.foundation.gestures.scrollable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardOptions
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.*
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.SideEffect
@@ -52,7 +51,7 @@ fun SignUpScreen() {
     Surface(
         modifier = Modifier
             .fillMaxSize()
-            .scrollable(scrollState, orientation = Orientation.Vertical)
+            .verticalScroll(scrollState, enabled = true)
     ) {
         Image(
             painter = painterResource(id = R.drawable.girl_pic_2),
