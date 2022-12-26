@@ -34,6 +34,7 @@ import com.ramcosta.composedestinations.annotation.Destination
 import com.ramcosta.composedestinations.navigation.DestinationsNavigator
 import dev.jahidhasanco.firebaseauth.R
 import dev.jahidhasanco.firebaseauth.presentation.screen.destinations.HomeScreenDestination
+import dev.jahidhasanco.firebaseauth.presentation.screen.destinations.LoginScreenDestination
 import dev.jahidhasanco.firebaseauth.presentation.viewmodel.AuthViewModel
 import dev.jahidhasanco.firebaseauth.ui.theme.FirebaseAuthTheme
 import dev.jahidhasanco.firebaseauth.ui.theme.primaryColor
@@ -74,7 +75,7 @@ fun LoginScreen(
                 }
                 it.data?.let { user ->
                     navigator.navigate(HomeScreenDestination)
-                    navigator.clearBackStack(HomeScreenDestination)
+                    navigator.clearBackStack(LoginScreenDestination)
                     Toast.makeText(context, "Welcome ${user.email}", Toast.LENGTH_SHORT).show()
                 }
             }
